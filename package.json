@@ -1,0 +1,22 @@
+{
+  "name": "@scribe-systems/scribe-api-usermanager",
+  "version": "1.0.0",
+  "description": "API for scribe usermanager",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "scribe-systems"
+  ],
+  "author": "Scribe Systems Sp. z o. o.",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scribe-systems-sp/scribe-api-usermanager.git"
+  },
+  "bugs": {
+    "url": "https://github.com/scribe-systems-sp/scribe-api-usermanager/issues"
+  },
+  "homepage": "https://github.com/scribe-systems-sp/scribe-api-usermanager#readme"
+}
