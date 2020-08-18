@@ -1,4 +1,4 @@
-import { SApi, Modularus } from 'modularus'
+import { SApi, Modularus } from '@scribe-systems/modularus'
 import Axios, { AxiosStatic } from 'axios'
 
 import { APIKeysApi, AccessRightsApi, AuthApi, UsersApi } from './api'
