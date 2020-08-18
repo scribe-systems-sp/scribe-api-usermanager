@@ -18,5 +18,9 @@
   "bugs": {
     "url": "https://github.com/scribe-systems-sp/scribe-api-usermanager/issues"
   },
-  "homepage": "https://github.com/scribe-systems-sp/scribe-api-usermanager#readme"
+  "homepage": "https://github.com/scribe-systems-sp/scribe-api-usermanager#readme",
+  "dependencies": {
+    "@scribe-systems/modularus": "^1.2.10",
+    "axios": "^0.19.2"
+  }
 }
