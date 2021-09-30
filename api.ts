@@ -17,6 +17,8 @@ import { Configuration } from './configuration';
 import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from './common';
+// @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from './base';
 
 /**
@@ -130,55 +132,6 @@ export interface BodyChangePasswordApiV1UsersChangePasswordPatch {
 /**
  * 
  * @export
- * @interface BodyCreateApiKeyApiV1AuthApikeysApikeyPost
- */
-export interface BodyCreateApiKeyApiV1AuthApikeysApikeyPost {
-    /**
-     * 
-     * @type {string}
-     * @memberof BodyCreateApiKeyApiV1AuthApikeysApikeyPost
-     */
-    grant_type?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BodyCreateApiKeyApiV1AuthApikeysApikeyPost
-     */
-    username: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BodyCreateApiKeyApiV1AuthApikeysApikeyPost
-     */
-    password: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BodyCreateApiKeyApiV1AuthApikeysApikeyPost
-     */
-    scope?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BodyCreateApiKeyApiV1AuthApikeysApikeyPost
-     */
-    client_id?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BodyCreateApiKeyApiV1AuthApikeysApikeyPost
-     */
-    client_secret?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BodyCreateApiKeyApiV1AuthApikeysApikeyPost
-     */
-    apikey_description?: string;
-}
-/**
- * 
- * @export
  * @interface BodyCreateUserApiV1UsersUserPost
  */
 export interface BodyCreateUserApiV1UsersUserPost {
@@ -220,49 +173,6 @@ export interface BodyDeleteRoleApiV1AccessrightsRolesRoleDelete {
      * @memberof BodyDeleteRoleApiV1AccessrightsRolesRoleDelete
      */
     roleName: string;
-}
-/**
- * 
- * @export
- * @interface BodyLoginForAccessTokenApiV1AuthTokenPost
- */
-export interface BodyLoginForAccessTokenApiV1AuthTokenPost {
-    /**
-     * 
-     * @type {string}
-     * @memberof BodyLoginForAccessTokenApiV1AuthTokenPost
-     */
-    grant_type?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BodyLoginForAccessTokenApiV1AuthTokenPost
-     */
-    username: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BodyLoginForAccessTokenApiV1AuthTokenPost
-     */
-    password: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BodyLoginForAccessTokenApiV1AuthTokenPost
-     */
-    scope?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BodyLoginForAccessTokenApiV1AuthTokenPost
-     */
-    client_id?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof BodyLoginForAccessTokenApiV1AuthTokenPost
-     */
-    client_secret?: string;
 }
 /**
  * 
@@ -541,20 +451,17 @@ export const APIKeysApiAxiosParamCreator = function (configuration?: Configurati
          */
         apiV1AuthApikeysCreateApiKey: async (username: string, password: string, grantType?: string, scope?: string, clientId?: string, clientSecret?: string, apikeyDescription?: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'username' is not null or undefined
-            if (username === null || username === undefined) {
-                throw new RequiredError('username','Required parameter username was null or undefined when calling apiV1AuthApikeysCreateApiKey.');
-            }
+            assertParamExists('apiV1AuthApikeysCreateApiKey', 'username', username)
             // verify required parameter 'password' is not null or undefined
-            if (password === null || password === undefined) {
-                throw new RequiredError('password','Required parameter password was null or undefined when calling apiV1AuthApikeysCreateApiKey.');
-            }
+            assertParamExists('apiV1AuthApikeysCreateApiKey', 'password', password)
             const localVarPath = `/usermanager/api/v1/auth/apikeys/apikey`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
             }
+
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
@@ -592,20 +499,13 @@ export const APIKeysApiAxiosParamCreator = function (configuration?: Configurati
     
             localVarHeaderParameter['Content-Type'] = 'application/x-www-form-urlencoded';
     
-            const query = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                query.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                query.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = localVarFormParams.toString();
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -618,48 +518,34 @@ export const APIKeysApiAxiosParamCreator = function (configuration?: Configurati
          */
         apiV1AuthApikeysDeleteApiKey: async (aPIKeyRequest: APIKeyRequest, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'aPIKeyRequest' is not null or undefined
-            if (aPIKeyRequest === null || aPIKeyRequest === undefined) {
-                throw new RequiredError('aPIKeyRequest','Required parameter aPIKeyRequest was null or undefined when calling apiV1AuthApikeysDeleteApiKey.');
-            }
+            assertParamExists('apiV1AuthApikeysDeleteApiKey', 'aPIKeyRequest', aPIKeyRequest)
             const localVarPath = `/usermanager/api/v1/auth/apikeys/apikey`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
             }
+
             const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
             // authentication OAuth2PasswordBearer required
             // oauth required
-            if (configuration && configuration.accessToken) {
-                const localVarAccessTokenValue = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken("OAuth2PasswordBearer", [])
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + localVarAccessTokenValue;
-            }
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
 
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
-            const query = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                query.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                query.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            const needsSerialization = (typeof aPIKeyRequest !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
-            localVarRequestOptions.data =  needsSerialization ? JSON.stringify(aPIKeyRequest !== undefined ? aPIKeyRequest : {}) : (aPIKeyRequest || "");
+            localVarRequestOptions.data = serializeDataIfNeeded(aPIKeyRequest, localVarRequestOptions, configuration)
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -672,39 +558,28 @@ export const APIKeysApiAxiosParamCreator = function (configuration?: Configurati
         apiV1AuthApikeysGetApiKeys: async (options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/usermanager/api/v1/auth/apikeys/all`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
             }
+
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
             // authentication OAuth2PasswordBearer required
             // oauth required
-            if (configuration && configuration.accessToken) {
-                const localVarAccessTokenValue = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken("OAuth2PasswordBearer", [])
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + localVarAccessTokenValue;
-            }
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
 
 
     
-            const query = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                query.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                query.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -716,6 +591,7 @@ export const APIKeysApiAxiosParamCreator = function (configuration?: Configurati
  * @export
  */
 export const APIKeysApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = APIKeysApiAxiosParamCreator(configuration)
     return {
         /**
          * Creates key similar to access token, but without expire time. This key will be stored at server and can be revoked at any moment.
@@ -731,11 +607,8 @@ export const APIKeysApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async apiV1AuthApikeysCreateApiKey(username: string, password: string, grantType?: string, scope?: string, clientId?: string, clientSecret?: string, apikeyDescription?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Token>> {
-            const localVarAxiosArgs = await APIKeysApiAxiosParamCreator(configuration).apiV1AuthApikeysCreateApiKey(username, password, grantType, scope, clientId, clientSecret, apikeyDescription, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1AuthApikeysCreateApiKey(username, password, grantType, scope, clientId, clientSecret, apikeyDescription, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
@@ -745,11 +618,8 @@ export const APIKeysApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async apiV1AuthApikeysDeleteApiKey(aPIKeyRequest: APIKeyRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Token>> {
-            const localVarAxiosArgs = await APIKeysApiAxiosParamCreator(configuration).apiV1AuthApikeysDeleteApiKey(aPIKeyRequest, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1AuthApikeysDeleteApiKey(aPIKeyRequest, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
@@ -758,11 +628,8 @@ export const APIKeysApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async apiV1AuthApikeysGetApiKeys(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<APIKeysResponse>> {
-            const localVarAxiosArgs = await APIKeysApiAxiosParamCreator(configuration).apiV1AuthApikeysGetApiKeys(options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1AuthApikeysGetApiKeys(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
 };
@@ -772,6 +639,7 @@ export const APIKeysApiFp = function(configuration?: Configuration) {
  * @export
  */
 export const APIKeysApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = APIKeysApiFp(configuration)
     return {
         /**
          * Creates key similar to access token, but without expire time. This key will be stored at server and can be revoked at any moment.
@@ -787,7 +655,7 @@ export const APIKeysApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         apiV1AuthApikeysCreateApiKey(username: string, password: string, grantType?: string, scope?: string, clientId?: string, clientSecret?: string, apikeyDescription?: string, options?: any): AxiosPromise<Token> {
-            return APIKeysApiFp(configuration).apiV1AuthApikeysCreateApiKey(username, password, grantType, scope, clientId, clientSecret, apikeyDescription, options).then((request) => request(axios, basePath));
+            return localVarFp.apiV1AuthApikeysCreateApiKey(username, password, grantType, scope, clientId, clientSecret, apikeyDescription, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -797,7 +665,7 @@ export const APIKeysApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         apiV1AuthApikeysDeleteApiKey(aPIKeyRequest: APIKeyRequest, options?: any): AxiosPromise<Token> {
-            return APIKeysApiFp(configuration).apiV1AuthApikeysDeleteApiKey(aPIKeyRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.apiV1AuthApikeysDeleteApiKey(aPIKeyRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -806,7 +674,7 @@ export const APIKeysApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         apiV1AuthApikeysGetApiKeys(options?: any): AxiosPromise<APIKeysResponse> {
-            return APIKeysApiFp(configuration).apiV1AuthApikeysGetApiKeys(options).then((request) => request(axios, basePath));
+            return localVarFp.apiV1AuthApikeysGetApiKeys(options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -876,48 +744,34 @@ export const AccessRightsApiAxiosParamCreator = function (configuration?: Config
          */
         apiV1AccessrightsManagingAssignPrivilege: async (bodyAssignPrivilegeApiV1AccessrightsManagingAssignPrivilegePatch: BodyAssignPrivilegeApiV1AccessrightsManagingAssignPrivilegePatch, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'bodyAssignPrivilegeApiV1AccessrightsManagingAssignPrivilegePatch' is not null or undefined
-            if (bodyAssignPrivilegeApiV1AccessrightsManagingAssignPrivilegePatch === null || bodyAssignPrivilegeApiV1AccessrightsManagingAssignPrivilegePatch === undefined) {
-                throw new RequiredError('bodyAssignPrivilegeApiV1AccessrightsManagingAssignPrivilegePatch','Required parameter bodyAssignPrivilegeApiV1AccessrightsManagingAssignPrivilegePatch was null or undefined when calling apiV1AccessrightsManagingAssignPrivilege.');
-            }
+            assertParamExists('apiV1AccessrightsManagingAssignPrivilege', 'bodyAssignPrivilegeApiV1AccessrightsManagingAssignPrivilegePatch', bodyAssignPrivilegeApiV1AccessrightsManagingAssignPrivilegePatch)
             const localVarPath = `/usermanager/api/v1/accessrights/managing/assignPrivilege`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
             }
+
             const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
             // authentication OAuth2PasswordBearer required
             // oauth required
-            if (configuration && configuration.accessToken) {
-                const localVarAccessTokenValue = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken("OAuth2PasswordBearer", [])
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + localVarAccessTokenValue;
-            }
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
 
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
-            const query = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                query.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                query.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            const needsSerialization = (typeof bodyAssignPrivilegeApiV1AccessrightsManagingAssignPrivilegePatch !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
-            localVarRequestOptions.data =  needsSerialization ? JSON.stringify(bodyAssignPrivilegeApiV1AccessrightsManagingAssignPrivilegePatch !== undefined ? bodyAssignPrivilegeApiV1AccessrightsManagingAssignPrivilegePatch : {}) : (bodyAssignPrivilegeApiV1AccessrightsManagingAssignPrivilegePatch || "");
+            localVarRequestOptions.data = serializeDataIfNeeded(bodyAssignPrivilegeApiV1AccessrightsManagingAssignPrivilegePatch, localVarRequestOptions, configuration)
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -930,48 +784,34 @@ export const AccessRightsApiAxiosParamCreator = function (configuration?: Config
          */
         apiV1AccessrightsManagingAssignRole: async (bodyAssignRoleApiV1AccessrightsManagingAssignRolePatch: BodyAssignRoleApiV1AccessrightsManagingAssignRolePatch, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'bodyAssignRoleApiV1AccessrightsManagingAssignRolePatch' is not null or undefined
-            if (bodyAssignRoleApiV1AccessrightsManagingAssignRolePatch === null || bodyAssignRoleApiV1AccessrightsManagingAssignRolePatch === undefined) {
-                throw new RequiredError('bodyAssignRoleApiV1AccessrightsManagingAssignRolePatch','Required parameter bodyAssignRoleApiV1AccessrightsManagingAssignRolePatch was null or undefined when calling apiV1AccessrightsManagingAssignRole.');
-            }
+            assertParamExists('apiV1AccessrightsManagingAssignRole', 'bodyAssignRoleApiV1AccessrightsManagingAssignRolePatch', bodyAssignRoleApiV1AccessrightsManagingAssignRolePatch)
             const localVarPath = `/usermanager/api/v1/accessrights/managing/assignRole`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
             }
+
             const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
             // authentication OAuth2PasswordBearer required
             // oauth required
-            if (configuration && configuration.accessToken) {
-                const localVarAccessTokenValue = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken("OAuth2PasswordBearer", [])
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + localVarAccessTokenValue;
-            }
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
 
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
-            const query = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                query.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                query.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            const needsSerialization = (typeof bodyAssignRoleApiV1AccessrightsManagingAssignRolePatch !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
-            localVarRequestOptions.data =  needsSerialization ? JSON.stringify(bodyAssignRoleApiV1AccessrightsManagingAssignRolePatch !== undefined ? bodyAssignRoleApiV1AccessrightsManagingAssignRolePatch : {}) : (bodyAssignRoleApiV1AccessrightsManagingAssignRolePatch || "");
+            localVarRequestOptions.data = serializeDataIfNeeded(bodyAssignRoleApiV1AccessrightsManagingAssignRolePatch, localVarRequestOptions, configuration)
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -984,48 +824,34 @@ export const AccessRightsApiAxiosParamCreator = function (configuration?: Config
          */
         apiV1AccessrightsManagingRemovePrivilege: async (bodyRemovePrivilegeApiV1AccessrightsManagingRemovePrivilegePatch: BodyRemovePrivilegeApiV1AccessrightsManagingRemovePrivilegePatch, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'bodyRemovePrivilegeApiV1AccessrightsManagingRemovePrivilegePatch' is not null or undefined
-            if (bodyRemovePrivilegeApiV1AccessrightsManagingRemovePrivilegePatch === null || bodyRemovePrivilegeApiV1AccessrightsManagingRemovePrivilegePatch === undefined) {
-                throw new RequiredError('bodyRemovePrivilegeApiV1AccessrightsManagingRemovePrivilegePatch','Required parameter bodyRemovePrivilegeApiV1AccessrightsManagingRemovePrivilegePatch was null or undefined when calling apiV1AccessrightsManagingRemovePrivilege.');
-            }
+            assertParamExists('apiV1AccessrightsManagingRemovePrivilege', 'bodyRemovePrivilegeApiV1AccessrightsManagingRemovePrivilegePatch', bodyRemovePrivilegeApiV1AccessrightsManagingRemovePrivilegePatch)
             const localVarPath = `/usermanager/api/v1/accessrights/managing/removePrivilege`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
             }
+
             const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
             // authentication OAuth2PasswordBearer required
             // oauth required
-            if (configuration && configuration.accessToken) {
-                const localVarAccessTokenValue = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken("OAuth2PasswordBearer", [])
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + localVarAccessTokenValue;
-            }
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
 
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
-            const query = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                query.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                query.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            const needsSerialization = (typeof bodyRemovePrivilegeApiV1AccessrightsManagingRemovePrivilegePatch !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
-            localVarRequestOptions.data =  needsSerialization ? JSON.stringify(bodyRemovePrivilegeApiV1AccessrightsManagingRemovePrivilegePatch !== undefined ? bodyRemovePrivilegeApiV1AccessrightsManagingRemovePrivilegePatch : {}) : (bodyRemovePrivilegeApiV1AccessrightsManagingRemovePrivilegePatch || "");
+            localVarRequestOptions.data = serializeDataIfNeeded(bodyRemovePrivilegeApiV1AccessrightsManagingRemovePrivilegePatch, localVarRequestOptions, configuration)
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -1038,48 +864,34 @@ export const AccessRightsApiAxiosParamCreator = function (configuration?: Config
          */
         apiV1AccessrightsManagingRemoveRole: async (bodyRemoveRoleApiV1AccessrightsManagingRemoveRolePatch: BodyRemoveRoleApiV1AccessrightsManagingRemoveRolePatch, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'bodyRemoveRoleApiV1AccessrightsManagingRemoveRolePatch' is not null or undefined
-            if (bodyRemoveRoleApiV1AccessrightsManagingRemoveRolePatch === null || bodyRemoveRoleApiV1AccessrightsManagingRemoveRolePatch === undefined) {
-                throw new RequiredError('bodyRemoveRoleApiV1AccessrightsManagingRemoveRolePatch','Required parameter bodyRemoveRoleApiV1AccessrightsManagingRemoveRolePatch was null or undefined when calling apiV1AccessrightsManagingRemoveRole.');
-            }
+            assertParamExists('apiV1AccessrightsManagingRemoveRole', 'bodyRemoveRoleApiV1AccessrightsManagingRemoveRolePatch', bodyRemoveRoleApiV1AccessrightsManagingRemoveRolePatch)
             const localVarPath = `/usermanager/api/v1/accessrights/managing/removeRole`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
             }
+
             const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
             // authentication OAuth2PasswordBearer required
             // oauth required
-            if (configuration && configuration.accessToken) {
-                const localVarAccessTokenValue = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken("OAuth2PasswordBearer", [])
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + localVarAccessTokenValue;
-            }
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
 
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
-            const query = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                query.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                query.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            const needsSerialization = (typeof bodyRemoveRoleApiV1AccessrightsManagingRemoveRolePatch !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
-            localVarRequestOptions.data =  needsSerialization ? JSON.stringify(bodyRemoveRoleApiV1AccessrightsManagingRemoveRolePatch !== undefined ? bodyRemoveRoleApiV1AccessrightsManagingRemoveRolePatch : {}) : (bodyRemoveRoleApiV1AccessrightsManagingRemoveRolePatch || "");
+            localVarRequestOptions.data = serializeDataIfNeeded(bodyRemoveRoleApiV1AccessrightsManagingRemoveRolePatch, localVarRequestOptions, configuration)
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -1093,32 +905,24 @@ export const AccessRightsApiAxiosParamCreator = function (configuration?: Config
          */
         apiV1AccessrightsManagingUserHasRoles: async (roles: Array<string>, login: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'roles' is not null or undefined
-            if (roles === null || roles === undefined) {
-                throw new RequiredError('roles','Required parameter roles was null or undefined when calling apiV1AccessrightsManagingUserHasRoles.');
-            }
+            assertParamExists('apiV1AccessrightsManagingUserHasRoles', 'roles', roles)
             // verify required parameter 'login' is not null or undefined
-            if (login === null || login === undefined) {
-                throw new RequiredError('login','Required parameter login was null or undefined when calling apiV1AccessrightsManagingUserHasRoles.');
-            }
+            assertParamExists('apiV1AccessrightsManagingUserHasRoles', 'login', login)
             const localVarPath = `/usermanager/api/v1/accessrights/managing/userHasRoles`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
             }
+
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
             // authentication OAuth2PasswordBearer required
             // oauth required
-            if (configuration && configuration.accessToken) {
-                const localVarAccessTokenValue = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken("OAuth2PasswordBearer", [])
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + localVarAccessTokenValue;
-            }
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
 
             if (roles) {
                 localVarQueryParameter['roles'] = roles;
@@ -1130,19 +934,12 @@ export const AccessRightsApiAxiosParamCreator = function (configuration?: Config
 
 
     
-            const query = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                query.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                query.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -1155,28 +952,22 @@ export const AccessRightsApiAxiosParamCreator = function (configuration?: Config
          */
         apiV1AccessrightsManagingUserPrivileges: async (login: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'login' is not null or undefined
-            if (login === null || login === undefined) {
-                throw new RequiredError('login','Required parameter login was null or undefined when calling apiV1AccessrightsManagingUserPrivileges.');
-            }
+            assertParamExists('apiV1AccessrightsManagingUserPrivileges', 'login', login)
             const localVarPath = `/usermanager/api/v1/accessrights/managing/userprivileges`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
             }
+
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
             // authentication OAuth2PasswordBearer required
             // oauth required
-            if (configuration && configuration.accessToken) {
-                const localVarAccessTokenValue = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken("OAuth2PasswordBearer", [])
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + localVarAccessTokenValue;
-            }
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
 
             if (login !== undefined) {
                 localVarQueryParameter['login'] = login;
@@ -1184,19 +975,12 @@ export const AccessRightsApiAxiosParamCreator = function (configuration?: Config
 
 
     
-            const query = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                query.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                query.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -1209,28 +993,22 @@ export const AccessRightsApiAxiosParamCreator = function (configuration?: Config
          */
         apiV1AccessrightsManagingUserRoles: async (login: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'login' is not null or undefined
-            if (login === null || login === undefined) {
-                throw new RequiredError('login','Required parameter login was null or undefined when calling apiV1AccessrightsManagingUserRoles.');
-            }
+            assertParamExists('apiV1AccessrightsManagingUserRoles', 'login', login)
             const localVarPath = `/usermanager/api/v1/accessrights/managing/userRoles`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
             }
+
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
             // authentication OAuth2PasswordBearer required
             // oauth required
-            if (configuration && configuration.accessToken) {
-                const localVarAccessTokenValue = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken("OAuth2PasswordBearer", [])
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + localVarAccessTokenValue;
-            }
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
 
             if (login !== undefined) {
                 localVarQueryParameter['login'] = login;
@@ -1238,19 +1016,12 @@ export const AccessRightsApiAxiosParamCreator = function (configuration?: Config
 
 
     
-            const query = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                query.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                query.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -1263,28 +1034,22 @@ export const AccessRightsApiAxiosParamCreator = function (configuration?: Config
          */
         apiV1AccessrightsManagingUsersWithRoles: async (roles: Array<string>, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'roles' is not null or undefined
-            if (roles === null || roles === undefined) {
-                throw new RequiredError('roles','Required parameter roles was null or undefined when calling apiV1AccessrightsManagingUsersWithRoles.');
-            }
+            assertParamExists('apiV1AccessrightsManagingUsersWithRoles', 'roles', roles)
             const localVarPath = `/usermanager/api/v1/accessrights/managing/usersWithRoles`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
             }
+
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
             // authentication OAuth2PasswordBearer required
             // oauth required
-            if (configuration && configuration.accessToken) {
-                const localVarAccessTokenValue = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken("OAuth2PasswordBearer", [])
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + localVarAccessTokenValue;
-            }
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
 
             if (roles) {
                 localVarQueryParameter['roles'] = roles;
@@ -1292,19 +1057,12 @@ export const AccessRightsApiAxiosParamCreator = function (configuration?: Config
 
 
     
-            const query = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                query.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                query.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -1317,48 +1075,34 @@ export const AccessRightsApiAxiosParamCreator = function (configuration?: Config
          */
         apiV1AccessrightsPrivilegesCreatePrivilege: async (privilege: Privilege, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'privilege' is not null or undefined
-            if (privilege === null || privilege === undefined) {
-                throw new RequiredError('privilege','Required parameter privilege was null or undefined when calling apiV1AccessrightsPrivilegesCreatePrivilege.');
-            }
+            assertParamExists('apiV1AccessrightsPrivilegesCreatePrivilege', 'privilege', privilege)
             const localVarPath = `/usermanager/api/v1/accessrights/privileges/privilege`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
             }
+
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
             // authentication OAuth2PasswordBearer required
             // oauth required
-            if (configuration && configuration.accessToken) {
-                const localVarAccessTokenValue = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken("OAuth2PasswordBearer", [])
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + localVarAccessTokenValue;
-            }
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
 
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
-            const query = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                query.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                query.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            const needsSerialization = (typeof privilege !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
-            localVarRequestOptions.data =  needsSerialization ? JSON.stringify(privilege !== undefined ? privilege : {}) : (privilege || "");
+            localVarRequestOptions.data = serializeDataIfNeeded(privilege, localVarRequestOptions, configuration)
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -1371,48 +1115,34 @@ export const AccessRightsApiAxiosParamCreator = function (configuration?: Config
          */
         apiV1AccessrightsPrivilegesDeletePrivilege: async (bodyDeletePrivilegeApiV1AccessrightsPrivilegesPrivilegeDelete: BodyDeletePrivilegeApiV1AccessrightsPrivilegesPrivilegeDelete, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'bodyDeletePrivilegeApiV1AccessrightsPrivilegesPrivilegeDelete' is not null or undefined
-            if (bodyDeletePrivilegeApiV1AccessrightsPrivilegesPrivilegeDelete === null || bodyDeletePrivilegeApiV1AccessrightsPrivilegesPrivilegeDelete === undefined) {
-                throw new RequiredError('bodyDeletePrivilegeApiV1AccessrightsPrivilegesPrivilegeDelete','Required parameter bodyDeletePrivilegeApiV1AccessrightsPrivilegesPrivilegeDelete was null or undefined when calling apiV1AccessrightsPrivilegesDeletePrivilege.');
-            }
+            assertParamExists('apiV1AccessrightsPrivilegesDeletePrivilege', 'bodyDeletePrivilegeApiV1AccessrightsPrivilegesPrivilegeDelete', bodyDeletePrivilegeApiV1AccessrightsPrivilegesPrivilegeDelete)
             const localVarPath = `/usermanager/api/v1/accessrights/privileges/privilege`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
             }
+
             const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
             // authentication OAuth2PasswordBearer required
             // oauth required
-            if (configuration && configuration.accessToken) {
-                const localVarAccessTokenValue = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken("OAuth2PasswordBearer", [])
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + localVarAccessTokenValue;
-            }
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
 
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
-            const query = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                query.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                query.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            const needsSerialization = (typeof bodyDeletePrivilegeApiV1AccessrightsPrivilegesPrivilegeDelete !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
-            localVarRequestOptions.data =  needsSerialization ? JSON.stringify(bodyDeletePrivilegeApiV1AccessrightsPrivilegesPrivilegeDelete !== undefined ? bodyDeletePrivilegeApiV1AccessrightsPrivilegesPrivilegeDelete : {}) : (bodyDeletePrivilegeApiV1AccessrightsPrivilegesPrivilegeDelete || "");
+            localVarRequestOptions.data = serializeDataIfNeeded(bodyDeletePrivilegeApiV1AccessrightsPrivilegesPrivilegeDelete, localVarRequestOptions, configuration)
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -1425,30 +1155,24 @@ export const AccessRightsApiAxiosParamCreator = function (configuration?: Config
         apiV1AccessrightsPrivilegesGetAll: async (options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/usermanager/api/v1/accessrights/privileges/all`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
             }
+
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
 
     
-            const query = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                query.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                query.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -1462,23 +1186,19 @@ export const AccessRightsApiAxiosParamCreator = function (configuration?: Config
         apiV1AccessrightsPrivilegesUserHasPrivilege: async (privileges?: Array<string>, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/usermanager/api/v1/accessrights/privileges/hasPrivilege`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
             }
+
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
             // authentication OAuth2PasswordBearer required
             // oauth required
-            if (configuration && configuration.accessToken) {
-                const localVarAccessTokenValue = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken("OAuth2PasswordBearer", [])
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + localVarAccessTokenValue;
-            }
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
 
             if (privileges) {
                 localVarQueryParameter['privileges'] = privileges;
@@ -1486,19 +1206,12 @@ export const AccessRightsApiAxiosParamCreator = function (configuration?: Config
 
 
     
-            const query = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                query.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                query.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -1511,48 +1224,34 @@ export const AccessRightsApiAxiosParamCreator = function (configuration?: Config
          */
         apiV1AccessrightsRolesCreateRole: async (role: Role, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'role' is not null or undefined
-            if (role === null || role === undefined) {
-                throw new RequiredError('role','Required parameter role was null or undefined when calling apiV1AccessrightsRolesCreateRole.');
-            }
+            assertParamExists('apiV1AccessrightsRolesCreateRole', 'role', role)
             const localVarPath = `/usermanager/api/v1/accessrights/roles/role`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
             }
+
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
             // authentication OAuth2PasswordBearer required
             // oauth required
-            if (configuration && configuration.accessToken) {
-                const localVarAccessTokenValue = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken("OAuth2PasswordBearer", [])
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + localVarAccessTokenValue;
-            }
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
 
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
-            const query = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                query.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                query.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            const needsSerialization = (typeof role !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
-            localVarRequestOptions.data =  needsSerialization ? JSON.stringify(role !== undefined ? role : {}) : (role || "");
+            localVarRequestOptions.data = serializeDataIfNeeded(role, localVarRequestOptions, configuration)
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -1565,48 +1264,34 @@ export const AccessRightsApiAxiosParamCreator = function (configuration?: Config
          */
         apiV1AccessrightsRolesDeleteRole: async (bodyDeleteRoleApiV1AccessrightsRolesRoleDelete: BodyDeleteRoleApiV1AccessrightsRolesRoleDelete, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'bodyDeleteRoleApiV1AccessrightsRolesRoleDelete' is not null or undefined
-            if (bodyDeleteRoleApiV1AccessrightsRolesRoleDelete === null || bodyDeleteRoleApiV1AccessrightsRolesRoleDelete === undefined) {
-                throw new RequiredError('bodyDeleteRoleApiV1AccessrightsRolesRoleDelete','Required parameter bodyDeleteRoleApiV1AccessrightsRolesRoleDelete was null or undefined when calling apiV1AccessrightsRolesDeleteRole.');
-            }
+            assertParamExists('apiV1AccessrightsRolesDeleteRole', 'bodyDeleteRoleApiV1AccessrightsRolesRoleDelete', bodyDeleteRoleApiV1AccessrightsRolesRoleDelete)
             const localVarPath = `/usermanager/api/v1/accessrights/roles/role`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
             }
+
             const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
             // authentication OAuth2PasswordBearer required
             // oauth required
-            if (configuration && configuration.accessToken) {
-                const localVarAccessTokenValue = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken("OAuth2PasswordBearer", [])
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + localVarAccessTokenValue;
-            }
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
 
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
-            const query = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                query.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                query.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            const needsSerialization = (typeof bodyDeleteRoleApiV1AccessrightsRolesRoleDelete !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
-            localVarRequestOptions.data =  needsSerialization ? JSON.stringify(bodyDeleteRoleApiV1AccessrightsRolesRoleDelete !== undefined ? bodyDeleteRoleApiV1AccessrightsRolesRoleDelete : {}) : (bodyDeleteRoleApiV1AccessrightsRolesRoleDelete || "");
+            localVarRequestOptions.data = serializeDataIfNeeded(bodyDeleteRoleApiV1AccessrightsRolesRoleDelete, localVarRequestOptions, configuration)
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -1619,16 +1304,15 @@ export const AccessRightsApiAxiosParamCreator = function (configuration?: Config
          */
         apiV1AccessrightsRolesGetRolePrivileges: async (roleName: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'roleName' is not null or undefined
-            if (roleName === null || roleName === undefined) {
-                throw new RequiredError('roleName','Required parameter roleName was null or undefined when calling apiV1AccessrightsRolesGetRolePrivileges.');
-            }
+            assertParamExists('apiV1AccessrightsRolesGetRolePrivileges', 'roleName', roleName)
             const localVarPath = `/usermanager/api/v1/accessrights/roles/rolePrivileges`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
             }
+
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
@@ -1639,19 +1323,12 @@ export const AccessRightsApiAxiosParamCreator = function (configuration?: Config
 
 
     
-            const query = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                query.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                query.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -1664,30 +1341,24 @@ export const AccessRightsApiAxiosParamCreator = function (configuration?: Config
         apiV1AccessrightsRolesRoles: async (options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/usermanager/api/v1/accessrights/roles/all`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
             }
+
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
 
     
-            const query = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                query.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                query.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -1699,6 +1370,7 @@ export const AccessRightsApiAxiosParamCreator = function (configuration?: Config
  * @export
  */
 export const AccessRightsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = AccessRightsApiAxiosParamCreator(configuration)
     return {
         /**
          * Assigns privilege to the role
@@ -1708,11 +1380,8 @@ export const AccessRightsApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async apiV1AccessrightsManagingAssignPrivilege(bodyAssignPrivilegeApiV1AccessrightsManagingAssignPrivilegePatch: BodyAssignPrivilegeApiV1AccessrightsManagingAssignPrivilegePatch, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await AccessRightsApiAxiosParamCreator(configuration).apiV1AccessrightsManagingAssignPrivilege(bodyAssignPrivilegeApiV1AccessrightsManagingAssignPrivilegePatch, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1AccessrightsManagingAssignPrivilege(bodyAssignPrivilegeApiV1AccessrightsManagingAssignPrivilegePatch, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
@@ -1722,11 +1391,8 @@ export const AccessRightsApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async apiV1AccessrightsManagingAssignRole(bodyAssignRoleApiV1AccessrightsManagingAssignRolePatch: BodyAssignRoleApiV1AccessrightsManagingAssignRolePatch, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await AccessRightsApiAxiosParamCreator(configuration).apiV1AccessrightsManagingAssignRole(bodyAssignRoleApiV1AccessrightsManagingAssignRolePatch, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1AccessrightsManagingAssignRole(bodyAssignRoleApiV1AccessrightsManagingAssignRolePatch, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Removes privilege from the role
@@ -1736,11 +1402,8 @@ export const AccessRightsApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async apiV1AccessrightsManagingRemovePrivilege(bodyRemovePrivilegeApiV1AccessrightsManagingRemovePrivilegePatch: BodyRemovePrivilegeApiV1AccessrightsManagingRemovePrivilegePatch, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await AccessRightsApiAxiosParamCreator(configuration).apiV1AccessrightsManagingRemovePrivilege(bodyRemovePrivilegeApiV1AccessrightsManagingRemovePrivilegePatch, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1AccessrightsManagingRemovePrivilege(bodyRemovePrivilegeApiV1AccessrightsManagingRemovePrivilegePatch, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Removes role from the user
@@ -1750,11 +1413,8 @@ export const AccessRightsApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async apiV1AccessrightsManagingRemoveRole(bodyRemoveRoleApiV1AccessrightsManagingRemoveRolePatch: BodyRemoveRoleApiV1AccessrightsManagingRemoveRolePatch, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await AccessRightsApiAxiosParamCreator(configuration).apiV1AccessrightsManagingRemoveRole(bodyRemoveRoleApiV1AccessrightsManagingRemoveRolePatch, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1AccessrightsManagingRemoveRole(bodyRemoveRoleApiV1AccessrightsManagingRemoveRolePatch, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Check if user has specified roles
@@ -1765,11 +1425,8 @@ export const AccessRightsApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async apiV1AccessrightsManagingUserHasRoles(roles: Array<string>, login: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await AccessRightsApiAxiosParamCreator(configuration).apiV1AccessrightsManagingUserHasRoles(roles, login, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1AccessrightsManagingUserHasRoles(roles, login, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Retrieves list of all user privileges.
@@ -1779,11 +1436,8 @@ export const AccessRightsApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async apiV1AccessrightsManagingUserPrivileges(login: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Privileges>> {
-            const localVarAxiosArgs = await AccessRightsApiAxiosParamCreator(configuration).apiV1AccessrightsManagingUserPrivileges(login, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1AccessrightsManagingUserPrivileges(login, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Gets all the roles for specified user
@@ -1793,11 +1447,8 @@ export const AccessRightsApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async apiV1AccessrightsManagingUserRoles(login: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Roles>> {
-            const localVarAxiosArgs = await AccessRightsApiAxiosParamCreator(configuration).apiV1AccessrightsManagingUserRoles(login, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1AccessrightsManagingUserRoles(login, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Get all users with specified roles
@@ -1807,11 +1458,8 @@ export const AccessRightsApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async apiV1AccessrightsManagingUsersWithRoles(roles: Array<string>, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await AccessRightsApiAxiosParamCreator(configuration).apiV1AccessrightsManagingUsersWithRoles(roles, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1AccessrightsManagingUsersWithRoles(roles, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Create new privilege.
@@ -1821,11 +1469,8 @@ export const AccessRightsApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async apiV1AccessrightsPrivilegesCreatePrivilege(privilege: Privilege, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await AccessRightsApiAxiosParamCreator(configuration).apiV1AccessrightsPrivilegesCreatePrivilege(privilege, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1AccessrightsPrivilegesCreatePrivilege(privilege, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
@@ -1835,11 +1480,8 @@ export const AccessRightsApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async apiV1AccessrightsPrivilegesDeletePrivilege(bodyDeletePrivilegeApiV1AccessrightsPrivilegesPrivilegeDelete: BodyDeletePrivilegeApiV1AccessrightsPrivilegesPrivilegeDelete, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await AccessRightsApiAxiosParamCreator(configuration).apiV1AccessrightsPrivilegesDeletePrivilege(bodyDeletePrivilegeApiV1AccessrightsPrivilegesPrivilegeDelete, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1AccessrightsPrivilegesDeletePrivilege(bodyDeletePrivilegeApiV1AccessrightsPrivilegesPrivilegeDelete, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Returns list of all possible privileges
@@ -1848,11 +1490,8 @@ export const AccessRightsApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async apiV1AccessrightsPrivilegesGetAll(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Privileges>> {
-            const localVarAxiosArgs = await AccessRightsApiAxiosParamCreator(configuration).apiV1AccessrightsPrivilegesGetAll(options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1AccessrightsPrivilegesGetAll(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
@@ -1862,11 +1501,8 @@ export const AccessRightsApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async apiV1AccessrightsPrivilegesUserHasPrivilege(privileges?: Array<string>, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await AccessRightsApiAxiosParamCreator(configuration).apiV1AccessrightsPrivilegesUserHasPrivilege(privileges, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1AccessrightsPrivilegesUserHasPrivilege(privileges, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Creates new role
@@ -1876,11 +1512,8 @@ export const AccessRightsApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async apiV1AccessrightsRolesCreateRole(role: Role, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await AccessRightsApiAxiosParamCreator(configuration).apiV1AccessrightsRolesCreateRole(role, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1AccessrightsRolesCreateRole(role, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Deletes role
@@ -1890,11 +1523,8 @@ export const AccessRightsApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async apiV1AccessrightsRolesDeleteRole(bodyDeleteRoleApiV1AccessrightsRolesRoleDelete: BodyDeleteRoleApiV1AccessrightsRolesRoleDelete, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await AccessRightsApiAxiosParamCreator(configuration).apiV1AccessrightsRolesDeleteRole(bodyDeleteRoleApiV1AccessrightsRolesRoleDelete, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1AccessrightsRolesDeleteRole(bodyDeleteRoleApiV1AccessrightsRolesRoleDelete, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Get list of all privileges assigned to specified role
@@ -1904,11 +1534,8 @@ export const AccessRightsApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async apiV1AccessrightsRolesGetRolePrivileges(roleName: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Privileges>> {
-            const localVarAxiosArgs = await AccessRightsApiAxiosParamCreator(configuration).apiV1AccessrightsRolesGetRolePrivileges(roleName, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1AccessrightsRolesGetRolePrivileges(roleName, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Gets all existed roles
@@ -1917,11 +1544,8 @@ export const AccessRightsApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async apiV1AccessrightsRolesRoles(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Roles>> {
-            const localVarAxiosArgs = await AccessRightsApiAxiosParamCreator(configuration).apiV1AccessrightsRolesRoles(options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1AccessrightsRolesRoles(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
 };
@@ -1931,6 +1555,7 @@ export const AccessRightsApiFp = function(configuration?: Configuration) {
  * @export
  */
 export const AccessRightsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = AccessRightsApiFp(configuration)
     return {
         /**
          * Assigns privilege to the role
@@ -1940,7 +1565,7 @@ export const AccessRightsApiFactory = function (configuration?: Configuration, b
          * @throws {RequiredError}
          */
         apiV1AccessrightsManagingAssignPrivilege(bodyAssignPrivilegeApiV1AccessrightsManagingAssignPrivilegePatch: BodyAssignPrivilegeApiV1AccessrightsManagingAssignPrivilegePatch, options?: any): AxiosPromise<any> {
-            return AccessRightsApiFp(configuration).apiV1AccessrightsManagingAssignPrivilege(bodyAssignPrivilegeApiV1AccessrightsManagingAssignPrivilegePatch, options).then((request) => request(axios, basePath));
+            return localVarFp.apiV1AccessrightsManagingAssignPrivilege(bodyAssignPrivilegeApiV1AccessrightsManagingAssignPrivilegePatch, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1950,7 +1575,7 @@ export const AccessRightsApiFactory = function (configuration?: Configuration, b
          * @throws {RequiredError}
          */
         apiV1AccessrightsManagingAssignRole(bodyAssignRoleApiV1AccessrightsManagingAssignRolePatch: BodyAssignRoleApiV1AccessrightsManagingAssignRolePatch, options?: any): AxiosPromise<any> {
-            return AccessRightsApiFp(configuration).apiV1AccessrightsManagingAssignRole(bodyAssignRoleApiV1AccessrightsManagingAssignRolePatch, options).then((request) => request(axios, basePath));
+            return localVarFp.apiV1AccessrightsManagingAssignRole(bodyAssignRoleApiV1AccessrightsManagingAssignRolePatch, options).then((request) => request(axios, basePath));
         },
         /**
          * Removes privilege from the role
@@ -1960,7 +1585,7 @@ export const AccessRightsApiFactory = function (configuration?: Configuration, b
          * @throws {RequiredError}
          */
         apiV1AccessrightsManagingRemovePrivilege(bodyRemovePrivilegeApiV1AccessrightsManagingRemovePrivilegePatch: BodyRemovePrivilegeApiV1AccessrightsManagingRemovePrivilegePatch, options?: any): AxiosPromise<any> {
-            return AccessRightsApiFp(configuration).apiV1AccessrightsManagingRemovePrivilege(bodyRemovePrivilegeApiV1AccessrightsManagingRemovePrivilegePatch, options).then((request) => request(axios, basePath));
+            return localVarFp.apiV1AccessrightsManagingRemovePrivilege(bodyRemovePrivilegeApiV1AccessrightsManagingRemovePrivilegePatch, options).then((request) => request(axios, basePath));
         },
         /**
          * Removes role from the user
@@ -1970,7 +1595,7 @@ export const AccessRightsApiFactory = function (configuration?: Configuration, b
          * @throws {RequiredError}
          */
         apiV1AccessrightsManagingRemoveRole(bodyRemoveRoleApiV1AccessrightsManagingRemoveRolePatch: BodyRemoveRoleApiV1AccessrightsManagingRemoveRolePatch, options?: any): AxiosPromise<any> {
-            return AccessRightsApiFp(configuration).apiV1AccessrightsManagingRemoveRole(bodyRemoveRoleApiV1AccessrightsManagingRemoveRolePatch, options).then((request) => request(axios, basePath));
+            return localVarFp.apiV1AccessrightsManagingRemoveRole(bodyRemoveRoleApiV1AccessrightsManagingRemoveRolePatch, options).then((request) => request(axios, basePath));
         },
         /**
          * Check if user has specified roles
@@ -1981,7 +1606,7 @@ export const AccessRightsApiFactory = function (configuration?: Configuration, b
          * @throws {RequiredError}
          */
         apiV1AccessrightsManagingUserHasRoles(roles: Array<string>, login: string, options?: any): AxiosPromise<any> {
-            return AccessRightsApiFp(configuration).apiV1AccessrightsManagingUserHasRoles(roles, login, options).then((request) => request(axios, basePath));
+            return localVarFp.apiV1AccessrightsManagingUserHasRoles(roles, login, options).then((request) => request(axios, basePath));
         },
         /**
          * Retrieves list of all user privileges.
@@ -1991,7 +1616,7 @@ export const AccessRightsApiFactory = function (configuration?: Configuration, b
          * @throws {RequiredError}
          */
         apiV1AccessrightsManagingUserPrivileges(login: string, options?: any): AxiosPromise<Privileges> {
-            return AccessRightsApiFp(configuration).apiV1AccessrightsManagingUserPrivileges(login, options).then((request) => request(axios, basePath));
+            return localVarFp.apiV1AccessrightsManagingUserPrivileges(login, options).then((request) => request(axios, basePath));
         },
         /**
          * Gets all the roles for specified user
@@ -2001,7 +1626,7 @@ export const AccessRightsApiFactory = function (configuration?: Configuration, b
          * @throws {RequiredError}
          */
         apiV1AccessrightsManagingUserRoles(login: string, options?: any): AxiosPromise<Roles> {
-            return AccessRightsApiFp(configuration).apiV1AccessrightsManagingUserRoles(login, options).then((request) => request(axios, basePath));
+            return localVarFp.apiV1AccessrightsManagingUserRoles(login, options).then((request) => request(axios, basePath));
         },
         /**
          * Get all users with specified roles
@@ -2011,7 +1636,7 @@ export const AccessRightsApiFactory = function (configuration?: Configuration, b
          * @throws {RequiredError}
          */
         apiV1AccessrightsManagingUsersWithRoles(roles: Array<string>, options?: any): AxiosPromise<any> {
-            return AccessRightsApiFp(configuration).apiV1AccessrightsManagingUsersWithRoles(roles, options).then((request) => request(axios, basePath));
+            return localVarFp.apiV1AccessrightsManagingUsersWithRoles(roles, options).then((request) => request(axios, basePath));
         },
         /**
          * Create new privilege.
@@ -2021,7 +1646,7 @@ export const AccessRightsApiFactory = function (configuration?: Configuration, b
          * @throws {RequiredError}
          */
         apiV1AccessrightsPrivilegesCreatePrivilege(privilege: Privilege, options?: any): AxiosPromise<any> {
-            return AccessRightsApiFp(configuration).apiV1AccessrightsPrivilegesCreatePrivilege(privilege, options).then((request) => request(axios, basePath));
+            return localVarFp.apiV1AccessrightsPrivilegesCreatePrivilege(privilege, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2031,7 +1656,7 @@ export const AccessRightsApiFactory = function (configuration?: Configuration, b
          * @throws {RequiredError}
          */
         apiV1AccessrightsPrivilegesDeletePrivilege(bodyDeletePrivilegeApiV1AccessrightsPrivilegesPrivilegeDelete: BodyDeletePrivilegeApiV1AccessrightsPrivilegesPrivilegeDelete, options?: any): AxiosPromise<any> {
-            return AccessRightsApiFp(configuration).apiV1AccessrightsPrivilegesDeletePrivilege(bodyDeletePrivilegeApiV1AccessrightsPrivilegesPrivilegeDelete, options).then((request) => request(axios, basePath));
+            return localVarFp.apiV1AccessrightsPrivilegesDeletePrivilege(bodyDeletePrivilegeApiV1AccessrightsPrivilegesPrivilegeDelete, options).then((request) => request(axios, basePath));
         },
         /**
          * Returns list of all possible privileges
@@ -2040,7 +1665,7 @@ export const AccessRightsApiFactory = function (configuration?: Configuration, b
          * @throws {RequiredError}
          */
         apiV1AccessrightsPrivilegesGetAll(options?: any): AxiosPromise<Privileges> {
-            return AccessRightsApiFp(configuration).apiV1AccessrightsPrivilegesGetAll(options).then((request) => request(axios, basePath));
+            return localVarFp.apiV1AccessrightsPrivilegesGetAll(options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2050,7 +1675,7 @@ export const AccessRightsApiFactory = function (configuration?: Configuration, b
          * @throws {RequiredError}
          */
         apiV1AccessrightsPrivilegesUserHasPrivilege(privileges?: Array<string>, options?: any): AxiosPromise<any> {
-            return AccessRightsApiFp(configuration).apiV1AccessrightsPrivilegesUserHasPrivilege(privileges, options).then((request) => request(axios, basePath));
+            return localVarFp.apiV1AccessrightsPrivilegesUserHasPrivilege(privileges, options).then((request) => request(axios, basePath));
         },
         /**
          * Creates new role
@@ -2060,7 +1685,7 @@ export const AccessRightsApiFactory = function (configuration?: Configuration, b
          * @throws {RequiredError}
          */
         apiV1AccessrightsRolesCreateRole(role: Role, options?: any): AxiosPromise<any> {
-            return AccessRightsApiFp(configuration).apiV1AccessrightsRolesCreateRole(role, options).then((request) => request(axios, basePath));
+            return localVarFp.apiV1AccessrightsRolesCreateRole(role, options).then((request) => request(axios, basePath));
         },
         /**
          * Deletes role
@@ -2070,7 +1695,7 @@ export const AccessRightsApiFactory = function (configuration?: Configuration, b
          * @throws {RequiredError}
          */
         apiV1AccessrightsRolesDeleteRole(bodyDeleteRoleApiV1AccessrightsRolesRoleDelete: BodyDeleteRoleApiV1AccessrightsRolesRoleDelete, options?: any): AxiosPromise<any> {
-            return AccessRightsApiFp(configuration).apiV1AccessrightsRolesDeleteRole(bodyDeleteRoleApiV1AccessrightsRolesRoleDelete, options).then((request) => request(axios, basePath));
+            return localVarFp.apiV1AccessrightsRolesDeleteRole(bodyDeleteRoleApiV1AccessrightsRolesRoleDelete, options).then((request) => request(axios, basePath));
         },
         /**
          * Get list of all privileges assigned to specified role
@@ -2080,7 +1705,7 @@ export const AccessRightsApiFactory = function (configuration?: Configuration, b
          * @throws {RequiredError}
          */
         apiV1AccessrightsRolesGetRolePrivileges(roleName: string, options?: any): AxiosPromise<Privileges> {
-            return AccessRightsApiFp(configuration).apiV1AccessrightsRolesGetRolePrivileges(roleName, options).then((request) => request(axios, basePath));
+            return localVarFp.apiV1AccessrightsRolesGetRolePrivileges(roleName, options).then((request) => request(axios, basePath));
         },
         /**
          * Gets all existed roles
@@ -2089,7 +1714,7 @@ export const AccessRightsApiFactory = function (configuration?: Configuration, b
          * @throws {RequiredError}
          */
         apiV1AccessrightsRolesRoles(options?: any): AxiosPromise<Roles> {
-            return AccessRightsApiFp(configuration).apiV1AccessrightsRolesRoles(options).then((request) => request(axios, basePath));
+            return localVarFp.apiV1AccessrightsRolesRoles(options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -2315,20 +1940,17 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
          */
         apiV1AuthApikeysCreateApiKey: async (username: string, password: string, grantType?: string, scope?: string, clientId?: string, clientSecret?: string, apikeyDescription?: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'username' is not null or undefined
-            if (username === null || username === undefined) {
-                throw new RequiredError('username','Required parameter username was null or undefined when calling apiV1AuthApikeysCreateApiKey.');
-            }
+            assertParamExists('apiV1AuthApikeysCreateApiKey', 'username', username)
             // verify required parameter 'password' is not null or undefined
-            if (password === null || password === undefined) {
-                throw new RequiredError('password','Required parameter password was null or undefined when calling apiV1AuthApikeysCreateApiKey.');
-            }
+            assertParamExists('apiV1AuthApikeysCreateApiKey', 'password', password)
             const localVarPath = `/usermanager/api/v1/auth/apikeys/apikey`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
             }
+
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
@@ -2366,20 +1988,13 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
     
             localVarHeaderParameter['Content-Type'] = 'application/x-www-form-urlencoded';
     
-            const query = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                query.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                query.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = localVarFormParams.toString();
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -2392,48 +2007,34 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
          */
         apiV1AuthApikeysDeleteApiKey: async (aPIKeyRequest: APIKeyRequest, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'aPIKeyRequest' is not null or undefined
-            if (aPIKeyRequest === null || aPIKeyRequest === undefined) {
-                throw new RequiredError('aPIKeyRequest','Required parameter aPIKeyRequest was null or undefined when calling apiV1AuthApikeysDeleteApiKey.');
-            }
+            assertParamExists('apiV1AuthApikeysDeleteApiKey', 'aPIKeyRequest', aPIKeyRequest)
             const localVarPath = `/usermanager/api/v1/auth/apikeys/apikey`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
             }
+
             const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
             // authentication OAuth2PasswordBearer required
             // oauth required
-            if (configuration && configuration.accessToken) {
-                const localVarAccessTokenValue = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken("OAuth2PasswordBearer", [])
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + localVarAccessTokenValue;
-            }
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
 
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
-            const query = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                query.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                query.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            const needsSerialization = (typeof aPIKeyRequest !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
-            localVarRequestOptions.data =  needsSerialization ? JSON.stringify(aPIKeyRequest !== undefined ? aPIKeyRequest : {}) : (aPIKeyRequest || "");
+            localVarRequestOptions.data = serializeDataIfNeeded(aPIKeyRequest, localVarRequestOptions, configuration)
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -2446,39 +2047,28 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
         apiV1AuthApikeysGetApiKeys: async (options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/usermanager/api/v1/auth/apikeys/all`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
             }
+
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
             // authentication OAuth2PasswordBearer required
             // oauth required
-            if (configuration && configuration.accessToken) {
-                const localVarAccessTokenValue = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken("OAuth2PasswordBearer", [])
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + localVarAccessTokenValue;
-            }
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
 
 
     
-            const query = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                query.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                query.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -2491,16 +2081,15 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
          */
         apiV1AuthIsTokenValid: async (token: Token, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'token' is not null or undefined
-            if (token === null || token === undefined) {
-                throw new RequiredError('token','Required parameter token was null or undefined when calling apiV1AuthIsTokenValid.');
-            }
+            assertParamExists('apiV1AuthIsTokenValid', 'token', token)
             const localVarPath = `/usermanager/api/v1/auth/checkToken`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
             }
+
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
@@ -2509,21 +2098,13 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
-            const query = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                query.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                query.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            const needsSerialization = (typeof token !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
-            localVarRequestOptions.data =  needsSerialization ? JSON.stringify(token !== undefined ? token : {}) : (token || "");
+            localVarRequestOptions.data = serializeDataIfNeeded(token, localVarRequestOptions, configuration)
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -2541,20 +2122,17 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
          */
         apiV1AuthLoginForAccessToken: async (username: string, password: string, grantType?: string, scope?: string, clientId?: string, clientSecret?: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'username' is not null or undefined
-            if (username === null || username === undefined) {
-                throw new RequiredError('username','Required parameter username was null or undefined when calling apiV1AuthLoginForAccessToken.');
-            }
+            assertParamExists('apiV1AuthLoginForAccessToken', 'username', username)
             // verify required parameter 'password' is not null or undefined
-            if (password === null || password === undefined) {
-                throw new RequiredError('password','Required parameter password was null or undefined when calling apiV1AuthLoginForAccessToken.');
-            }
+            assertParamExists('apiV1AuthLoginForAccessToken', 'password', password)
             const localVarPath = `/usermanager/api/v1/auth/token`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
             }
+
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
@@ -2588,20 +2166,13 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
     
             localVarHeaderParameter['Content-Type'] = 'application/x-www-form-urlencoded';
     
-            const query = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                query.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                query.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = localVarFormParams.toString();
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -2613,6 +2184,7 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
  * @export
  */
 export const AuthApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = AuthApiAxiosParamCreator(configuration)
     return {
         /**
          * Creates key similar to access token, but without expire time. This key will be stored at server and can be revoked at any moment.
@@ -2628,11 +2200,8 @@ export const AuthApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async apiV1AuthApikeysCreateApiKey(username: string, password: string, grantType?: string, scope?: string, clientId?: string, clientSecret?: string, apikeyDescription?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Token>> {
-            const localVarAxiosArgs = await AuthApiAxiosParamCreator(configuration).apiV1AuthApikeysCreateApiKey(username, password, grantType, scope, clientId, clientSecret, apikeyDescription, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1AuthApikeysCreateApiKey(username, password, grantType, scope, clientId, clientSecret, apikeyDescription, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
@@ -2642,11 +2211,8 @@ export const AuthApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async apiV1AuthApikeysDeleteApiKey(aPIKeyRequest: APIKeyRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Token>> {
-            const localVarAxiosArgs = await AuthApiAxiosParamCreator(configuration).apiV1AuthApikeysDeleteApiKey(aPIKeyRequest, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1AuthApikeysDeleteApiKey(aPIKeyRequest, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
@@ -2655,11 +2221,8 @@ export const AuthApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async apiV1AuthApikeysGetApiKeys(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<APIKeysResponse>> {
-            const localVarAxiosArgs = await AuthApiAxiosParamCreator(configuration).apiV1AuthApikeysGetApiKeys(options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1AuthApikeysGetApiKeys(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
@@ -2669,11 +2232,8 @@ export const AuthApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async apiV1AuthIsTokenValid(token: Token, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TokenStatus>> {
-            const localVarAxiosArgs = await AuthApiAxiosParamCreator(configuration).apiV1AuthIsTokenValid(token, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1AuthIsTokenValid(token, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Allows to create access token.  Use scopes for definig access privileges. If no scopes defined -  token with all possible scopes for current user will be generated. If you just want empty token - add global_empty scope.
@@ -2688,11 +2248,8 @@ export const AuthApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async apiV1AuthLoginForAccessToken(username: string, password: string, grantType?: string, scope?: string, clientId?: string, clientSecret?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Token>> {
-            const localVarAxiosArgs = await AuthApiAxiosParamCreator(configuration).apiV1AuthLoginForAccessToken(username, password, grantType, scope, clientId, clientSecret, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1AuthLoginForAccessToken(username, password, grantType, scope, clientId, clientSecret, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
 };
@@ -2702,6 +2259,7 @@ export const AuthApiFp = function(configuration?: Configuration) {
  * @export
  */
 export const AuthApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = AuthApiFp(configuration)
     return {
         /**
          * Creates key similar to access token, but without expire time. This key will be stored at server and can be revoked at any moment.
@@ -2717,7 +2275,7 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @throws {RequiredError}
          */
         apiV1AuthApikeysCreateApiKey(username: string, password: string, grantType?: string, scope?: string, clientId?: string, clientSecret?: string, apikeyDescription?: string, options?: any): AxiosPromise<Token> {
-            return AuthApiFp(configuration).apiV1AuthApikeysCreateApiKey(username, password, grantType, scope, clientId, clientSecret, apikeyDescription, options).then((request) => request(axios, basePath));
+            return localVarFp.apiV1AuthApikeysCreateApiKey(username, password, grantType, scope, clientId, clientSecret, apikeyDescription, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2727,7 +2285,7 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @throws {RequiredError}
          */
         apiV1AuthApikeysDeleteApiKey(aPIKeyRequest: APIKeyRequest, options?: any): AxiosPromise<Token> {
-            return AuthApiFp(configuration).apiV1AuthApikeysDeleteApiKey(aPIKeyRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.apiV1AuthApikeysDeleteApiKey(aPIKeyRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2736,7 +2294,7 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @throws {RequiredError}
          */
         apiV1AuthApikeysGetApiKeys(options?: any): AxiosPromise<APIKeysResponse> {
-            return AuthApiFp(configuration).apiV1AuthApikeysGetApiKeys(options).then((request) => request(axios, basePath));
+            return localVarFp.apiV1AuthApikeysGetApiKeys(options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2746,7 +2304,7 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @throws {RequiredError}
          */
         apiV1AuthIsTokenValid(token: Token, options?: any): AxiosPromise<TokenStatus> {
-            return AuthApiFp(configuration).apiV1AuthIsTokenValid(token, options).then((request) => request(axios, basePath));
+            return localVarFp.apiV1AuthIsTokenValid(token, options).then((request) => request(axios, basePath));
         },
         /**
          * Allows to create access token.  Use scopes for definig access privileges. If no scopes defined -  token with all possible scopes for current user will be generated. If you just want empty token - add global_empty scope.
@@ -2761,7 +2319,7 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @throws {RequiredError}
          */
         apiV1AuthLoginForAccessToken(username: string, password: string, grantType?: string, scope?: string, clientId?: string, clientSecret?: string, options?: any): AxiosPromise<Token> {
-            return AuthApiFp(configuration).apiV1AuthLoginForAccessToken(username, password, grantType, scope, clientId, clientSecret, options).then((request) => request(axios, basePath));
+            return localVarFp.apiV1AuthLoginForAccessToken(username, password, grantType, scope, clientId, clientSecret, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -2861,28 +2419,22 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
          */
         apiV1UsersCanIManage: async (privilegeCandidate: string, userId?: Array<number>, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'privilegeCandidate' is not null or undefined
-            if (privilegeCandidate === null || privilegeCandidate === undefined) {
-                throw new RequiredError('privilegeCandidate','Required parameter privilegeCandidate was null or undefined when calling apiV1UsersCanIManage.');
-            }
+            assertParamExists('apiV1UsersCanIManage', 'privilegeCandidate', privilegeCandidate)
             const localVarPath = `/usermanager/api/v1/users/canIManage`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
             }
+
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
             // authentication OAuth2PasswordBearer required
             // oauth required
-            if (configuration && configuration.accessToken) {
-                const localVarAccessTokenValue = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken("OAuth2PasswordBearer", [])
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + localVarAccessTokenValue;
-            }
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
 
             if (privilegeCandidate !== undefined) {
                 localVarQueryParameter['privilegeCandidate'] = privilegeCandidate;
@@ -2894,19 +2446,12 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
 
 
     
-            const query = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                query.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                query.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -2919,16 +2464,15 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
          */
         apiV1UsersChangePassword: async (bodyChangePasswordApiV1UsersChangePasswordPatch: BodyChangePasswordApiV1UsersChangePasswordPatch, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'bodyChangePasswordApiV1UsersChangePasswordPatch' is not null or undefined
-            if (bodyChangePasswordApiV1UsersChangePasswordPatch === null || bodyChangePasswordApiV1UsersChangePasswordPatch === undefined) {
-                throw new RequiredError('bodyChangePasswordApiV1UsersChangePasswordPatch','Required parameter bodyChangePasswordApiV1UsersChangePasswordPatch was null or undefined when calling apiV1UsersChangePassword.');
-            }
+            assertParamExists('apiV1UsersChangePassword', 'bodyChangePasswordApiV1UsersChangePasswordPatch', bodyChangePasswordApiV1UsersChangePasswordPatch)
             const localVarPath = `/usermanager/api/v1/users/changePassword`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
             }
+
             const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
@@ -2937,21 +2481,13 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
-            const query = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                query.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                query.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            const needsSerialization = (typeof bodyChangePasswordApiV1UsersChangePasswordPatch !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
-            localVarRequestOptions.data =  needsSerialization ? JSON.stringify(bodyChangePasswordApiV1UsersChangePasswordPatch !== undefined ? bodyChangePasswordApiV1UsersChangePasswordPatch : {}) : (bodyChangePasswordApiV1UsersChangePasswordPatch || "");
+            localVarRequestOptions.data = serializeDataIfNeeded(bodyChangePasswordApiV1UsersChangePasswordPatch, localVarRequestOptions, configuration)
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -2964,48 +2500,34 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
          */
         apiV1UsersCreateUser: async (bodyCreateUserApiV1UsersUserPost: BodyCreateUserApiV1UsersUserPost, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'bodyCreateUserApiV1UsersUserPost' is not null or undefined
-            if (bodyCreateUserApiV1UsersUserPost === null || bodyCreateUserApiV1UsersUserPost === undefined) {
-                throw new RequiredError('bodyCreateUserApiV1UsersUserPost','Required parameter bodyCreateUserApiV1UsersUserPost was null or undefined when calling apiV1UsersCreateUser.');
-            }
+            assertParamExists('apiV1UsersCreateUser', 'bodyCreateUserApiV1UsersUserPost', bodyCreateUserApiV1UsersUserPost)
             const localVarPath = `/usermanager/api/v1/users/user`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
             }
+
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
             // authentication OAuth2PasswordBearer required
             // oauth required
-            if (configuration && configuration.accessToken) {
-                const localVarAccessTokenValue = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken("OAuth2PasswordBearer", [])
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + localVarAccessTokenValue;
-            }
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
 
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
-            const query = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                query.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                query.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            const needsSerialization = (typeof bodyCreateUserApiV1UsersUserPost !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
-            localVarRequestOptions.data =  needsSerialization ? JSON.stringify(bodyCreateUserApiV1UsersUserPost !== undefined ? bodyCreateUserApiV1UsersUserPost : {}) : (bodyCreateUserApiV1UsersUserPost || "");
+            localVarRequestOptions.data = serializeDataIfNeeded(bodyCreateUserApiV1UsersUserPost, localVarRequestOptions, configuration)
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -3024,23 +2546,19 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
         apiV1UsersGetUser: async (userId?: number, login?: string, loginSubstring?: string, role?: string, active?: boolean, values?: Array<string>, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/usermanager/api/v1/users/all`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
             }
+
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
             // authentication OAuth2PasswordBearer required
             // oauth required
-            if (configuration && configuration.accessToken) {
-                const localVarAccessTokenValue = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken("OAuth2PasswordBearer", [])
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + localVarAccessTokenValue;
-            }
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
 
             if (userId !== undefined) {
                 localVarQueryParameter['user_id'] = userId;
@@ -3068,19 +2586,12 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
 
 
     
-            const query = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                query.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                query.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -3093,28 +2604,22 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
          */
         apiV1UsersIsUserActive: async (login: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'login' is not null or undefined
-            if (login === null || login === undefined) {
-                throw new RequiredError('login','Required parameter login was null or undefined when calling apiV1UsersIsUserActive.');
-            }
+            assertParamExists('apiV1UsersIsUserActive', 'login', login)
             const localVarPath = `/usermanager/api/v1/users/isActive`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
             }
+
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
             // authentication OAuth2PasswordBearer required
             // oauth required
-            if (configuration && configuration.accessToken) {
-                const localVarAccessTokenValue = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken("OAuth2PasswordBearer", [])
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + localVarAccessTokenValue;
-            }
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
 
             if (login !== undefined) {
                 localVarQueryParameter['login'] = login;
@@ -3122,19 +2627,12 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
 
 
     
-            const query = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                query.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                query.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -3147,48 +2645,34 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
          */
         apiV1UsersResetPassword: async (bodyResetPasswordApiV1UsersResetPasswordPatch: BodyResetPasswordApiV1UsersResetPasswordPatch, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'bodyResetPasswordApiV1UsersResetPasswordPatch' is not null or undefined
-            if (bodyResetPasswordApiV1UsersResetPasswordPatch === null || bodyResetPasswordApiV1UsersResetPasswordPatch === undefined) {
-                throw new RequiredError('bodyResetPasswordApiV1UsersResetPasswordPatch','Required parameter bodyResetPasswordApiV1UsersResetPasswordPatch was null or undefined when calling apiV1UsersResetPassword.');
-            }
+            assertParamExists('apiV1UsersResetPassword', 'bodyResetPasswordApiV1UsersResetPasswordPatch', bodyResetPasswordApiV1UsersResetPasswordPatch)
             const localVarPath = `/usermanager/api/v1/users/resetPassword`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
             }
+
             const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
             // authentication OAuth2PasswordBearer required
             // oauth required
-            if (configuration && configuration.accessToken) {
-                const localVarAccessTokenValue = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken("OAuth2PasswordBearer", [])
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + localVarAccessTokenValue;
-            }
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
 
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
-            const query = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                query.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                query.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            const needsSerialization = (typeof bodyResetPasswordApiV1UsersResetPasswordPatch !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
-            localVarRequestOptions.data =  needsSerialization ? JSON.stringify(bodyResetPasswordApiV1UsersResetPasswordPatch !== undefined ? bodyResetPasswordApiV1UsersResetPasswordPatch : {}) : (bodyResetPasswordApiV1UsersResetPasswordPatch || "");
+            localVarRequestOptions.data = serializeDataIfNeeded(bodyResetPasswordApiV1UsersResetPasswordPatch, localVarRequestOptions, configuration)
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -3201,48 +2685,34 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
          */
         apiV1UsersSetActiveUser: async (bodySetActiveUserApiV1UsersSetActivePatch: BodySetActiveUserApiV1UsersSetActivePatch, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'bodySetActiveUserApiV1UsersSetActivePatch' is not null or undefined
-            if (bodySetActiveUserApiV1UsersSetActivePatch === null || bodySetActiveUserApiV1UsersSetActivePatch === undefined) {
-                throw new RequiredError('bodySetActiveUserApiV1UsersSetActivePatch','Required parameter bodySetActiveUserApiV1UsersSetActivePatch was null or undefined when calling apiV1UsersSetActiveUser.');
-            }
+            assertParamExists('apiV1UsersSetActiveUser', 'bodySetActiveUserApiV1UsersSetActivePatch', bodySetActiveUserApiV1UsersSetActivePatch)
             const localVarPath = `/usermanager/api/v1/users/setActive`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
             }
+
             const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
             // authentication OAuth2PasswordBearer required
             // oauth required
-            if (configuration && configuration.accessToken) {
-                const localVarAccessTokenValue = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken("OAuth2PasswordBearer", [])
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + localVarAccessTokenValue;
-            }
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
 
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
-            const query = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                query.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                query.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            const needsSerialization = (typeof bodySetActiveUserApiV1UsersSetActivePatch !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
-            localVarRequestOptions.data =  needsSerialization ? JSON.stringify(bodySetActiveUserApiV1UsersSetActivePatch !== undefined ? bodySetActiveUserApiV1UsersSetActivePatch : {}) : (bodySetActiveUserApiV1UsersSetActivePatch || "");
+            localVarRequestOptions.data = serializeDataIfNeeded(bodySetActiveUserApiV1UsersSetActivePatch, localVarRequestOptions, configuration)
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -3250,53 +2720,45 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
          * 
          * @summary Whocanimanage
          * @param {string} privilegeCandidate 
+         * @param {string} [specificRole] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1UsersWhoCanIManage: async (privilegeCandidate: string, options: any = {}): Promise<RequestArgs> => {
+        apiV1UsersWhoCanIManage: async (privilegeCandidate: string, specificRole?: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'privilegeCandidate' is not null or undefined
-            if (privilegeCandidate === null || privilegeCandidate === undefined) {
-                throw new RequiredError('privilegeCandidate','Required parameter privilegeCandidate was null or undefined when calling apiV1UsersWhoCanIManage.');
-            }
+            assertParamExists('apiV1UsersWhoCanIManage', 'privilegeCandidate', privilegeCandidate)
             const localVarPath = `/usermanager/api/v1/users/whoCanIManage`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
             }
+
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
             // authentication OAuth2PasswordBearer required
             // oauth required
-            if (configuration && configuration.accessToken) {
-                const localVarAccessTokenValue = typeof configuration.accessToken === 'function'
-                    ? await configuration.accessToken("OAuth2PasswordBearer", [])
-                    : await configuration.accessToken;
-                localVarHeaderParameter["Authorization"] = "Bearer " + localVarAccessTokenValue;
-            }
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
 
             if (privilegeCandidate !== undefined) {
                 localVarQueryParameter['privilegeCandidate'] = privilegeCandidate;
             }
 
+            if (specificRole !== undefined) {
+                localVarQueryParameter['specificRole'] = specificRole;
+            }
+
 
     
-            const query = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                query.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                query.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
             };
         },
@@ -3308,6 +2770,7 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
  * @export
  */
 export const UsersApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = UsersApiAxiosParamCreator(configuration)
     return {
         /**
          * Checks if user can manage listed user with provided privilege candidate. Returns list of user that he can manage
@@ -3318,11 +2781,8 @@ export const UsersApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async apiV1UsersCanIManage(privilegeCandidate: string, userId?: Array<number>, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await UsersApiAxiosParamCreator(configuration).apiV1UsersCanIManage(privilegeCandidate, userId, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1UsersCanIManage(privilegeCandidate, userId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Change user password to new one
@@ -3332,11 +2792,8 @@ export const UsersApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async apiV1UsersChangePassword(bodyChangePasswordApiV1UsersChangePasswordPatch: BodyChangePasswordApiV1UsersChangePasswordPatch, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Password>> {
-            const localVarAxiosArgs = await UsersApiAxiosParamCreator(configuration).apiV1UsersChangePassword(bodyChangePasswordApiV1UsersChangePasswordPatch, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1UsersChangePassword(bodyChangePasswordApiV1UsersChangePasswordPatch, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
@@ -3346,11 +2803,8 @@ export const UsersApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async apiV1UsersCreateUser(bodyCreateUserApiV1UsersUserPost: BodyCreateUserApiV1UsersUserPost, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await UsersApiAxiosParamCreator(configuration).apiV1UsersCreateUser(bodyCreateUserApiV1UsersUserPost, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1UsersCreateUser(bodyCreateUserApiV1UsersUserPost, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
@@ -3365,11 +2819,8 @@ export const UsersApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async apiV1UsersGetUser(userId?: number, login?: string, loginSubstring?: string, role?: string, active?: boolean, values?: Array<string>, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UsersResponse>> {
-            const localVarAxiosArgs = await UsersApiAxiosParamCreator(configuration).apiV1UsersGetUser(userId, login, loginSubstring, role, active, values, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1UsersGetUser(userId, login, loginSubstring, role, active, values, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Returns True if user is active. Otherwise False
@@ -3379,11 +2830,8 @@ export const UsersApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async apiV1UsersIsUserActive(login: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserStatus>> {
-            const localVarAxiosArgs = await UsersApiAxiosParamCreator(configuration).apiV1UsersIsUserActive(login, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1UsersIsUserActive(login, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Set user password to random one. Doesnt require to know old password.  Requires additional manage_users privileges.  Requester should be authorized with token that has at least all the target user privileges.
@@ -3393,11 +2841,8 @@ export const UsersApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async apiV1UsersResetPassword(bodyResetPasswordApiV1UsersResetPasswordPatch: BodyResetPasswordApiV1UsersResetPasswordPatch, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await UsersApiAxiosParamCreator(configuration).apiV1UsersResetPassword(bodyResetPasswordApiV1UsersResetPasswordPatch, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1UsersResetPassword(bodyResetPasswordApiV1UsersResetPasswordPatch, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * Activates or deactivates user. Deactivated users have no previleges and can do nothing inside system.
@@ -3407,25 +2852,20 @@ export const UsersApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async apiV1UsersSetActiveUser(bodySetActiveUserApiV1UsersSetActivePatch: BodySetActiveUserApiV1UsersSetActivePatch, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await UsersApiAxiosParamCreator(configuration).apiV1UsersSetActiveUser(bodySetActiveUserApiV1UsersSetActivePatch, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1UsersSetActiveUser(bodySetActiveUserApiV1UsersSetActivePatch, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
          * @summary Whocanimanage
          * @param {string} privilegeCandidate 
+         * @param {string} [specificRole] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiV1UsersWhoCanIManage(privilegeCandidate: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
-            const localVarAxiosArgs = await UsersApiAxiosParamCreator(configuration).apiV1UsersWhoCanIManage(privilegeCandidate, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
+        async apiV1UsersWhoCanIManage(privilegeCandidate: string, specificRole?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1UsersWhoCanIManage(privilegeCandidate, specificRole, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
 };
@@ -3435,6 +2875,7 @@ export const UsersApiFp = function(configuration?: Configuration) {
  * @export
  */
 export const UsersApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = UsersApiFp(configuration)
     return {
         /**
          * Checks if user can manage listed user with provided privilege candidate. Returns list of user that he can manage
@@ -3445,7 +2886,7 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
          * @throws {RequiredError}
          */
         apiV1UsersCanIManage(privilegeCandidate: string, userId?: Array<number>, options?: any): AxiosPromise<any> {
-            return UsersApiFp(configuration).apiV1UsersCanIManage(privilegeCandidate, userId, options).then((request) => request(axios, basePath));
+            return localVarFp.apiV1UsersCanIManage(privilegeCandidate, userId, options).then((request) => request(axios, basePath));
         },
         /**
          * Change user password to new one
@@ -3455,7 +2896,7 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
          * @throws {RequiredError}
          */
         apiV1UsersChangePassword(bodyChangePasswordApiV1UsersChangePasswordPatch: BodyChangePasswordApiV1UsersChangePasswordPatch, options?: any): AxiosPromise<Password> {
-            return UsersApiFp(configuration).apiV1UsersChangePassword(bodyChangePasswordApiV1UsersChangePasswordPatch, options).then((request) => request(axios, basePath));
+            return localVarFp.apiV1UsersChangePassword(bodyChangePasswordApiV1UsersChangePasswordPatch, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -3465,7 +2906,7 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
          * @throws {RequiredError}
          */
         apiV1UsersCreateUser(bodyCreateUserApiV1UsersUserPost: BodyCreateUserApiV1UsersUserPost, options?: any): AxiosPromise<any> {
-            return UsersApiFp(configuration).apiV1UsersCreateUser(bodyCreateUserApiV1UsersUserPost, options).then((request) => request(axios, basePath));
+            return localVarFp.apiV1UsersCreateUser(bodyCreateUserApiV1UsersUserPost, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -3480,7 +2921,7 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
          * @throws {RequiredError}
          */
         apiV1UsersGetUser(userId?: number, login?: string, loginSubstring?: string, role?: string, active?: boolean, values?: Array<string>, options?: any): AxiosPromise<UsersResponse> {
-            return UsersApiFp(configuration).apiV1UsersGetUser(userId, login, loginSubstring, role, active, values, options).then((request) => request(axios, basePath));
+            return localVarFp.apiV1UsersGetUser(userId, login, loginSubstring, role, active, values, options).then((request) => request(axios, basePath));
         },
         /**
          * Returns True if user is active. Otherwise False
@@ -3490,7 +2931,7 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
          * @throws {RequiredError}
          */
         apiV1UsersIsUserActive(login: string, options?: any): AxiosPromise<UserStatus> {
-            return UsersApiFp(configuration).apiV1UsersIsUserActive(login, options).then((request) => request(axios, basePath));
+            return localVarFp.apiV1UsersIsUserActive(login, options).then((request) => request(axios, basePath));
         },
         /**
          * Set user password to random one. Doesnt require to know old password.  Requires additional manage_users privileges.  Requester should be authorized with token that has at least all the target user privileges.
@@ -3500,7 +2941,7 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
          * @throws {RequiredError}
          */
         apiV1UsersResetPassword(bodyResetPasswordApiV1UsersResetPasswordPatch: BodyResetPasswordApiV1UsersResetPasswordPatch, options?: any): AxiosPromise<any> {
-            return UsersApiFp(configuration).apiV1UsersResetPassword(bodyResetPasswordApiV1UsersResetPasswordPatch, options).then((request) => request(axios, basePath));
+            return localVarFp.apiV1UsersResetPassword(bodyResetPasswordApiV1UsersResetPasswordPatch, options).then((request) => request(axios, basePath));
         },
         /**
          * Activates or deactivates user. Deactivated users have no previleges and can do nothing inside system.
@@ -3510,17 +2951,18 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
          * @throws {RequiredError}
          */
         apiV1UsersSetActiveUser(bodySetActiveUserApiV1UsersSetActivePatch: BodySetActiveUserApiV1UsersSetActivePatch, options?: any): AxiosPromise<any> {
-            return UsersApiFp(configuration).apiV1UsersSetActiveUser(bodySetActiveUserApiV1UsersSetActivePatch, options).then((request) => request(axios, basePath));
+            return localVarFp.apiV1UsersSetActiveUser(bodySetActiveUserApiV1UsersSetActivePatch, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary Whocanimanage
          * @param {string} privilegeCandidate 
+         * @param {string} [specificRole] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1UsersWhoCanIManage(privilegeCandidate: string, options?: any): AxiosPromise<any> {
-            return UsersApiFp(configuration).apiV1UsersWhoCanIManage(privilegeCandidate, options).then((request) => request(axios, basePath));
+        apiV1UsersWhoCanIManage(privilegeCandidate: string, specificRole?: string, options?: any): AxiosPromise<any> {
+            return localVarFp.apiV1UsersWhoCanIManage(privilegeCandidate, specificRole, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -3626,12 +3068,13 @@ export class UsersApi extends BaseAPI {
      * 
      * @summary Whocanimanage
      * @param {string} privilegeCandidate 
+     * @param {string} [specificRole] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UsersApi
      */
-    public apiV1UsersWhoCanIManage(privilegeCandidate: string, options?: any) {
-        return UsersApiFp(this.configuration).apiV1UsersWhoCanIManage(privilegeCandidate, options).then((request) => request(this.axios, this.basePath));
+    public apiV1UsersWhoCanIManage(privilegeCandidate: string, specificRole?: string, options?: any) {
+        return UsersApiFp(this.configuration).apiV1UsersWhoCanIManage(privilegeCandidate, specificRole, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
